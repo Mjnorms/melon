@@ -1,22 +1,43 @@
-# servings per day
-vegetables = 2.5
-fruits = 2
-grains = 6
-dairy = 3
-protein = 5.5
+import json
 
+# current servings per day
+current_servings = {
+    "vegetables": -1,
+    "fruits": -1,
+    "grains": -1,
+    "dairy": 1,
+    "protein": -1
+}
+
+#//////////////////////////////////////////////////////////////
 def main():
     print("Welcome to Melon")
     printServingsLeft()
+    collectServingsFromDefault()
+    printServingsLeft()
+    storeServingsToJSON()
+#//////////////////////////////////////////////////////////////
 
-
+# Print number of servings left in from CURRENT servings
 def printServingsLeft():
     print("Your required servings left for today:")
-    print(f"Vegetables: {vegetables} ")
-    print(f"Fruits: {fruits} ")
-    print(f"Grains: {grains} ")
-    print(f"Dairy: {dairy} ")
-    print(f"Protein: {protein} ")
+    for group, value in current_servings.items():
+        print(f"{group}: {value} ")
+
+# Load default servings from JSON file
+def collectServingsFromDefault():
+    global current_servings 
+    try:
+        with open("default_servings.json", "r") as default_file:
+            current_servings = json.load(default_file)
+    except FileNotFoundError:
+        print("ERROR: default_servings.json not found; collectServingsFromDefault()")
+
+# Store the current servings left to JSON
+def storeServingsToJSON():
+    with open("current_servings.json", "w") as json_file:
+        json.dump(current_servings, json_file)
 
 
-main()
+if __name__ == "__main__":
+    main()
